@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Matrix Kehidupan — Ubah tanggal lahirmu menjadi peta 22 Arcana. Alat refleksi numerologi yang berjalan sepenuhnya di perangkatmu.">
+<title>Matrix Kehidupan — Peta 22 Arcana dari Tanggal Lahirmu</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital@0;1&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#0F0D18;
+    --bg-card:#1A1626;
+    --bg-card-2:#221C33;
+    --gold:#C9A227;
+    --gold-soft:#E4C874;
+    --wine:#9C3B4D;
+    --violet:#6E5A9E;
+    --text:#EDE7D9;
+    --text-dim:#9C93AE;
+    --line:#332C48;
+    --shadow: 0 20px 60px rgba(0,0,0,.5);
+    --radius: 14px;
+    --max-width:1280px;
+  }
+  html[data-theme="light"]{
+    --bg:#F3ECDC;
+    --bg-card:#FFFCF5;
+    --bg-card-2:#FBF3E1;
+    --gold:#A9791C;
+    --gold-soft:#8A6216;
+    --wine:#8B2E3E;
+    --violet:#5B4A88;
+    --text:#241B2F;
+    --text-dim:#6B6178;
+    --line:#DCCFAF;
+    --shadow: 0 20px 50px rgba(90,70,30,.18);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; min-height:100vh; font-family:'Manrope',sans-serif; color:var(--text);
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(201,162,39,.10), transparent 45%),
+      radial-gradient(ellipse at 100% 10%, rgba(110,90,158,.14), transparent 40%),
+      var(--bg);
+    transition:background-color .4s ease, color .4s ease;
+  }
+
+  /* Typography */
+  .eyebrow{font-family:'JetBrains Mono',monospace; letter-spacing:.18em; text-transform:uppercase; font-size:12px; color:var(--gold-soft);}
+  h1,h2,h3{font-family:'Cinzel',serif; font-weight:600; margin:0;}
+  .serif-italic{font-family:'Cormorant Garamond',serif; font-style:italic;}
+  p.lede{color:var(--text-dim); max-width:46ch; font-size:1.03rem; line-height:1.6;}
+
+  /* Layout */
+  nav{
+    position:sticky; top:0; z-index:40;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 6vw; background:color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-mark{width:34px;height:34px;border:1.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold); font-family:'Cinzel',serif; font-size:14px;}
+  .brand-name{font-family:'Cinzel', serif; font-size:16px; letter-spacing:.04em;}
+  .navlinks{display:flex; gap:18px; align-items:center;}
+  .navlinks a{color:var(--text-dim); text-decoration:none; font-size:14px;}
+  .navlinks a:hover, .navlinks a:focus{color:var(--gold-soft); outline:none;}
+  #darkToggle{border:1px solid var(--line); background:transparent; color:var(--text); width:40px; height:40px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px;}
+  #darkToggle:hover{border-color:var(--gold); transform:rotate(16deg);}
+
+  main{max-width:var(--max-width); margin:0 auto; padding-bottom:60px;}
+
+  /* Hero / Dashboard */
+  .hero{padding:64px 6vw 36px; display:grid; grid-template-columns:1.1fr .9fr; gap:36px; align-items:center;}
+  .hero h1{font-size:clamp(28px,4.4vw,48px); line-height:1.08;}
+  .card{background:linear-gradient(160deg, var(--bg-card), var(--bg-card-2)); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow);}
+  #dashboard-form{padding:28px; display:flex; flex-direction:column; gap:14px;}
+  .field-label{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; display:block;}
+  input[type="date"], input[type="text"]{
+    width:100%; padding:12px 14px; background:var(--bg); border:1px solid var(--line); border-radius:10px; color:var(--text);
+    font-family:'Manrope',sans-serif; font-size:15px;
+  }
+  input[type="date"]:focus, input[type="text"]:focus{outline:2px solid var(--gold); outline-offset:2px;}
+  #calcBtn{margin-top:6px; padding:14px 18px; border:none; border-radius:10px; background:linear-gradient(135deg, var(--gold), var(--gold-soft)); color:#1a1408; font-family:'Cinzel',serif; font-weight:600; cursor:pointer;}
+  #calcBtn:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(201,162,39,.22);}
+
+  .form-note{font-size:12.5px; color:var(--text-dim); line-height:1.5;}
+
+  /* Matrix */
+  section#matrix{padding:18px 6vw 70px; display:none;}
+  section#matrix.show{display:block;}
+  .section-head{margin-bottom:22px; text-align:center;}
+  .matrix-wrap{display:grid; gap:22px; justify-items:center; align-items:start;}
+  .basepoints{display:flex; gap:12px; flex-wrap:wrap; justify-content:center;}
+  .basepoint{padding:8px 14px; border:1px solid var(--line); border-radius:999px; font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text-dim); background:var(--bg-card);}
+  .basepoint b{color:var(--gold-soft); font-weight:600;}
+
+  #matrixSvgHolder{width:100%; max-width:640px;}
+  svg{width:100%; height:auto; display:block;}
+
+  .node{cursor:pointer;}
+  .node circle.dot{fill:var(--bg-card); stroke:var(--gold); stroke-width:1.6; transition:fill .18s, stroke .18s, r .18s;}
+  .node:focus circle.dot, .node:hover circle.dot{fill:var(--gold); r:26;}
+  .node text.num{font-family:'Cinzel', serif; font-weight:700; font-size:18px; fill:var(--gold-soft); text-anchor:middle; dominant-baseline:middle; pointer-events:none;}
+  .node text.lbl{font-family:'JetBrains Mono', monospace; font-size:9.5px; fill:var(--text-dim); text-anchor:middle; pointer-events:none;}
+  .center circle.dot{fill:var(--wine); stroke:var(--gold-soft); stroke-width:2;}
+  .center text.num{fill:#fff;}
+  .line-path{fill:none; stroke:var(--line); stroke-width:1.4;}
+  .line-love{stroke:var(--wine); stroke-width:2;}
+  .line-money{stroke:var(--gold); stroke-width:2;}
+  .line-karma{stroke:var(--violet); stroke-width:2;}
+
+  .legend{display:flex; gap:18px; flex-wrap:wrap; justify-content:center; font-size:12.5px; color:var(--text-dim);}
+  .legend span{display:inline-flex; align-items:center; gap:8px;}
+  .legend i{width:16px; height:2px; display:inline-block;}
+
+  /* Cara membaca */
+  section#cara{padding:48px 6vw 80px; max-width:920px; margin:0 auto;}
+  .steps{margin-top:22px; display:flex; flex-direction:column; gap:0;}
+  .step{display:grid; grid-template-columns:64px 1fr; gap:18px; padding:20px 0; border-top:1px solid var(--line);}
+  .step:last-child{border-bottom:1px solid var(--line);}
+  .step .idx{font-family:'Cinzel',serif; font-size:24px; color:var(--gold); opacity:.85;}
+  .step h3{font-size:17px; margin-bottom:6px;}
+  .step p{margin:0; color:var(--text-dim); font-size:14.5px; line-height:1.6;}
+
+  footer{padding:28px 6vw 40px; text-align:center; color:var(--text-dim); font-size:12.5px; border-top:1px solid var(--line);}
+
+  /* Modal */
+  #modalOverlay{position:fixed; inset:0; background:rgba(5,4,10,.72); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:100; padding:20px; opacity:0; transition:opacity .25s ease;}
+  #modalOverlay.show{display:flex;}
+  #modalOverlay.visible{opacity:1;}
+  #modalCard{width:100%; max-width:520px; background:linear-gradient(165deg, var(--bg-card), var(--bg-card-2)); border:1px solid var(--gold); border-radius:18px; padding:28px 26px 24px; box-shadow:0 30px 80px rgba(0,0,0,.55); transform:scale(.96) translateY(10px); transition:transform .28s cubic-bezier(.2,.9,.3,1.2); position:relative;}
+  #modalOverlay.visible #modalCard{transform:scale(1) translateY(0);}
+  #modalClose{position:absolute; top:14px; right:14px; background:none; border:none; color:var(--text-dim); font-size:20px; cursor:pointer;}
+  #modalClose:hover{color:var(--gold);}
+  .modal-eyebrow{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em; color:var(--gold-soft); text-transform:uppercase;}
+  .modal-num{font-family:'Cinzel',serif; font-size:44px; color:var(--gold); margin:8px 0 4px;}
+  .modal-arcana{font-family:'Cormorant Garamond',serif; font-style:italic; font-size:20px; margin-bottom:12px; color:var(--text);}
+  .modal-meaning{font-size:15px; line-height:1.7; color:var(--text-dim);}
+
+  /* small screens */
+  @media (max-width:900px){ .hero{grid-template-columns:1fr; padding-top:40px;} .navlinks a:not(.navicon){display:none;} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important;} }
+
+  /* focus outlines for keyboard users */
+  .node:focus { outline: 3px solid rgba(201,162,39,.18); outline-offset:6px; border-radius:8px; }
+  button:focus, input:focus, a:focus { box-shadow:0 0 0 3px rgba(201,162,39,.12); }
+
+  /* print-friendly (simplified) */
+  @media print{
+    nav, footer, #modalOverlay, #darkToggle, #calcBtn { display:none !important; }
+    body{background:white; color:black;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">✦</div>
+    <div class="brand-name">Matrix Kehidupan</div>
+  </div>
+  <div class="navlinks" role="navigation" aria-label="Navigasi utama">
+    <a href="#dashboard">Dashboard</a>
+    <a href="#matrix">Matrix</a>
+    <a href="#cara">Cara Membaca</a>
+    <button id="darkToggle" title="Ganti tema" aria-pressed="false" aria-label="Ganti tema terang/gelap">◐</button>
+  </div>
+</nav>
+
+<main>
+  <noscript>
+    <div style="background:#ffe9c9;color:#422800;padding:10px 18px;margin:16px 6vw;border-radius:10px;max-width:var(--max-width);">
+      JavaScript diperlukan agar Matrix dapat berfungsi penuh. Halaman ini menampilkan konten statis.
+    </div>
+  </noscript>
+
+  <!-- DASHBOARD -->
+  <section class="hero" id="dashboard" aria-labelledby="dashboard-title">
+    <div>
+      <div class="eyebrow">Numerologi · 22 Arcana</div>
+      <h1 id="dashboard-title">Baca peta takdirmu<br><span class="serif-italic" style="font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400;">dari satu tanggal lahir.</span></h1>
+      <p class="lede">Matrix Kehidupan mengubah tanggal lahirmu menjadi sembilan titik energi yang dipetakan pada 22 Arcana — terinspirasi dari sistem numerologi populer yang memadukan angka, simbol tarot, dan garis karma leluhur. Masukkan tanggal lahirmu untuk mulai.</p>
+    </div>
+
+    <form class="card" id="dashboard-form" aria-describedby="form-note" novalidate>
+      <div style="padding:18px;">
+        <label class="field-label" for="nameInput">Nama (opsional)</label>
+        <input type="text" id="nameInput" placeholder="Untuk sapaan di hasil matrix-mu" autocomplete="name">
+      </div>
+      <div style="padding:0 18px 18px;">
+        <label class="field-label" for="dobInput">Tanggal Lahir</label>
+        <input type="date" id="dobInput" required aria-required="true" aria-describedby="dobHelp" pattern="\d{4}-\d{2}-\d{2}">
+        <div id="dobHelp" style="font-size:12px; color:var(--text-dim); margin-top:8px;">Jika browser Anda tidak mendukung pemilih tanggal, gunakan format YYYY-MM-DD (contoh: 1990-07-28).</div>
+      </div>
+
+      <div style="padding:0 18px 18px;">
+        <button type="submit" id="calcBtn" aria-controls="matrix">Hitung Matrix →</button>
+        <p id="form-note" class="form-note">Perhitungan berjalan sepenuhnya di perangkatmu — tidak ada data yang dikirim ke server mana pun.</p>
+      </div>
+    </form>
+  </section>
+
+  <!-- MATRIX -->
+  <section id="matrix" aria-labelledby="matrix-heading" tabindex="-1">
+    <div class="section-head">
+      <div class="eyebrow" id="matrixGreeting" aria-live="polite">Hasil Perhitungan</div>
+      <h2 id="matrix-heading">Matrix Kehidupan-mu</h2>
+    </div>
+
+    <div class="matrix-wrap">
+      <div class="basepoints" id="basepoints" aria-hidden="false"></div>
+      <div id="matrixSvgHolder" role="region" aria-label="Diagram matrix" tabindex="0"></div>
+      <div class="legend" aria-hidden="true">
+        <span><i style="background:var(--wine)"></i> Jalur Cinta</span>
+        <span><i style="background:var(--gold)"></i> Jalur Rezeki</span>
+        <span><i style="background:var(--violet)"></i> Ekor Karma</span>
+        <span><i style="background:var(--line)"></i> Rangka Dasar</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CARA MEMBACA -->
+  <section id="cara" aria-labelledby="cara-heading">
+    <div class="section-head" style="text-align:left;">
+      <div class="eyebrow">Panduan</div>
+      <h2 id="cara-heading">Cara Membaca Matrix-mu</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="idx">A·B·C</div>
+        <div>
+          <h3>Titik Dasar</h3>
+          <p>Tiga titik dasar diambil langsung dari tanggal lahir: hari (A), bulan (B), dan jumlah digit tahun yang direduksi (C). Ketiganya adalah bahan baku untuk semua titik lain di matrix.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="idx">□</div>
+        <div>
+          <h3>Kotak Luar — D, E, F, G</h3>
+          <p>Empat sudut kotak luar terbentuk dari kombinasi titik dasar. D (atas) adalah Tujuan Hidup-mu — energi inti yang membentuk sudut-sudut lainnya: Talenta (E), Garis Karma (F), dan Warisan Leluhur (G).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="idx">◇</div>
+        <div>
+          <h3>Kotak Dalam — H, I, J, K</h3>
+          <p>Kotak dalam yang berputar 45° memuat empat titik yang lebih personal: Jalur Cinta, Jalur Rezeki, Ekor Karma, dan Diri Batin. Titik-titik ini menunjukkan bagaimana energi utamamu terasa dalam kehidupan sehari-hari.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="idx">✦</div>
+        <div>
+          <h3>Titik Pusat</h3>
+          <p>Di tengah matrix ada Inti Jiwa — sintesis dari seluruh kotak luar. Banyak pembaca menganggap titik ini sebagai "benang merah" yang menghubungkan seluruh cerita di sekelilingnya.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="idx">i</div>
+        <div>
+          <h3>Sentuh Setiap Titik</h3>
+          <p>Ketuk lingkaran mana pun pada matrix untuk membuka kartu Arcana lengkap dengan makna singkatnya. Angka yang sering berulang di beberapa titik biasanya menandakan energi yang paling dominan dalam dirimu.</p>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:20px; font-size:12.5px; color:var(--text-dim); line-height:1.6;">
+      Catatan: Matrix Kehidupan adalah alat refleksi diri yang bersifat simbolis dan menghibur, bukan pengganti nasihat profesional (medis, psikologis, hukum, atau finansial).
+    </p>
+  </section>
+</main>
+
+<footer>Matrix Kehidupan · Peta 22 Arcana dari Tanggal Lahirmu</footer>
+
+<!-- MODAL -->
+<div id="modalOverlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalLabel" aria-describedby="modalMeaning">
+  <div id="modalCard">
+    <button id="modalClose" aria-label="Tutup">✕</button>
+    <div class="modal-eyebrow" id="modalLabel">Titik</div>
+    <div class="modal-num" id="modalNum">00</div>
+    <div class="modal-arcana" id="modalArcana">Nama Arcana</div>
+    <div class="modal-meaning" id="modalMeaning">Makna arcana.</div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   DATABASE 22 ARCANA
+========================================================= */
+const ARCANA = [
+  null,
+  {name:"Sang Magician", meaning:"Kehendak dan permulaan. Energi untuk mengaktifkan potensi yang selama ini masih berupa niat."},
+  {name:"Pendeta Agung Wanita", meaning:"Intuisi dan pengetahuan tersembunyi. Kebijaksanaan yang datang dari dalam, bukan dari logika semata."},
+  {name:"Sang Permaisuri", meaning:"Kelimpahan dan kreativitas. Kehangatan yang menyuburkan apa pun yang disentuhnya."},
+  {name:"Sang Kaisar", meaning:"Struktur dan tanggung jawab. Kemampuan membangun fondasi yang kokoh dan bertahan lama."},
+  {name:"Sang Pendeta", meaning:"Tradisi dan bimbingan. Nilai-nilai yang diwariskan dan dijadikan pegangan hidup."},
+  {name:"Sepasang Kekasih", meaning:"Pilihan dan keselarasan hati. Titik temu antara logika dan perasaan dalam sebuah hubungan."},
+  {name:"Sang Kereta", meaning:"Kemauan keras dan arah yang jelas. Energi untuk menembus tantangan menuju tujuan."},
+  {name:"Sang Kekuatan", meaning:"Keberanian yang lembut. Ketabahan yang lahir dari pengendalian diri, bukan paksaan."},
+  {name:"Sang Pertapa", meaning:"Perenungan dan pencarian makna. Kebijaksanaan yang ditemukan dalam kesunyian."},
+  {name:"Roda Kehidupan", meaning:"Perubahan dan siklus. Titik balik yang membawa arah baru dalam perjalanan takdir."},
+  {name:"Keadilan", meaning:"Keseimbangan sebab-akibat. Kejujuran sebagai dasar dari setiap keputusan."},
+  {name:"Sang Tergantung", meaning:"Jeda dan pengorbanan kecil. Sudut pandang baru yang hanya terlihat saat kita berhenti sejenak."},
+  {name:"Transformasi", meaning:"Akhir yang melahirkan awal. Pelepasan terhadap apa yang sudah tidak melayani lagi."},
+  {name:"Sang Penyeimbang", meaning:"Harmoni dan penyembuhan. Perpaduan unsur-unsur yang tampak bertentangan menjadi selaras."},
+  {name:"Sang Bayangan", meaning:"Godaan dan keterikatan. Pola berulang yang diam-diam mengikat pilihan hidup."},
+  {name:"Menara", meaning:"Keruntuhan yang mendadak. Kebenaran yang memaksa keluar dari struktur yang rapuh."},
+  {name:"Sang Bintang", meaning:"Harapan dan pemulihan. Cahaya kecil yang menuntun setelah masa-masa gelap."},
+  {name:"Sang Rembulan", meaning:"Ilusi dan emosi tersembunyi. Dunia bawah sadar yang menyimpan ketakutan sekaligus intuisi."},
+  {name:"Sang Matahari", meaning:"Kejelasan dan vitalitas. Kegembiraan yang jujur dan terbuka."},
+  {name:"Sang Panggilan", meaning:"Kebangkitan dan evaluasi diri. Momen mendengar kembali panggilan yang sempat terlupa."},
+  {name:"Sang Semesta", meaning:"Penyelesaian dan kepenuhan. Rasa syukur atas satu siklus besar yang telah tercapai."},
+  {name:"Sang Pengembara", meaning:"Awal yang murni. Keberanian melangkah tanpa peta, mempercayai proses yang belum diketahui."}
+];
+
+/* =========================================================
+   UTILS: reduksi ke 1-22 & penjumlahan digit
+   - reduce22: memetakan bilangan bulat apa pun ke rentang 1..22
+   - digitSum: jumlah digit (bila perlu, bisa diperluas ke repetitif)
+========================================================= */
+function reduce22(n){
+  // ensure integer
+  const v = Math.floor(Number(n) || 0);
+  // map any integer to 1..22 (handles negative as well)
+  return ((v - 1) % 22 + 22) % 22 + 1;
+}
+function digitSumOnce(n){
+  // jumlahkan digit (satu langkah)
+  return String(Math.abs(Math.floor(Number(n) || 0))).split("").reduce((s,d)=>s+Number(d),0);
+}
+
+/* =========================================================
+   HITUNG MATRIX
+   - day, month, year sebagai angka
+   - C diambil dari penjumlahan digit tahun (satu langkah), lalu dipetakan ke 1..22
+========================================================= */
+function hitungMatrix(day, month, year){
+  const A = reduce22(day);
+  const B = reduce22(month);
+  const C = reduce22(digitSumOnce(year));
+
+  const D = reduce22(A + B + C);   // Tujuan Hidup
+  const E = reduce22(A + D);       // Talenta Tersembunyi
+  const F = reduce22(B + D);       // Garis Karma
+  const G = reduce22(C + D);       // Warisan Leluhur
+
+  const H = reduce22(D + E);       // Jalur Cinta
+  const I = reduce22(D + F);       // Jalur Rezeki
+  const J = reduce22(D + G);       // Ekor Karma
+  const K = reduce22(E + G);       // Diri Batin
+
+  const CENTER = reduce22(D + E + F + G); // Inti Jiwa
+
+  return {A,B,C,D,E,F,G,H,I,J,K,CENTER};
+}
+
+/* =========================================================
+   NODE META & RENDER SVG
+========================================================= */
+const NODE_META = {
+  D:{label:"Tujuan Hidup"}, E:{label:"Talenta Tersembunyi"}, F:{label:"Garis Karma"}, G:{label:"Warisan Leluhur"},
+  H:{label:"Jalur Cinta"}, I:{label:"Jalur Rezeki"}, J:{label:"Ekor Karma"}, K:{label:"Diri Batin"},
+  CENTER:{label:"Inti Jiwa"}
+};
+
+function buildSvg(values){
+  // layout coordinates (designed for 600x600 viewBox)
+  const cx=300, cy=300;
+  const rOuter=200, rInner=125;
+  const pos = {
+    D:[cx, cy-rOuter],
+    F:[cx, cy+rOuter],
+    G:[cx-rOuter, cy],
+    E:[cx+rOuter, cy],
+    H:[cx+rInner*0.75, cy-rInner*0.75],
+    I:[cx+rInner*0.75, cy+rInner*0.75],
+    J:[cx-rInner*0.75, cy+rInner*0.75],
+    K:[cx-rInner*0.75, cy-rInner*0.75],
+    CENTER:[cx, cy]
+  };
+
+  const outerPath = `M${pos.D} L${pos.E} L${pos.F} L${pos.G} Z`;
+  const innerPath = `M${pos.H} L${pos.I} L${pos.J} L${pos.K} Z`;
+  const centerLines = ["D","E","F","G"].map(k=>`M${cx},${cy} L${pos[k]}`).join(" ");
+  const lovePath = `M${pos.G} L${pos.H} L${pos.E}`;
+  const moneyPath = `M${pos.E} L${pos.I} L${pos.F}`;
+  const karmaPath = `M${pos.F} L${pos.J} L${pos.G}`;
+
+  let svg = `<svg id="matrixSvg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram Matrix Kehidupan">`;
+  svg += `<title>Diagram Matrix Kehidupan</title><desc>Diagram menunjukkan titik-titik numerologi hasil perhitungan dari tanggal lahir.</desc>`;
+  svg += `<path class="line-path" d="${outerPath}" />`;
+  svg += `<path class="line-path" d="${innerPath}" />`;
+  svg += `<path class="line-path" d="${centerLines}" />`;
+  svg += `<path class="line-path line-love" d="${lovePath}" />`;
+  svg += `<path class="line-path line-money" d="${moneyPath}" />`;
+  svg += `<path class="line-path line-karma" d="${karmaPath}" />`;
+
+  for(const key of Object.keys(pos)){
+    const [x,y] = pos[key];
+    const isCenter = key==="CENTER";
+    const num = values[key];
+    const label = NODE_META[key].label;
+    // each node is keyboard focusable, has accessible name via aria-label
+    svg += `
+      <g class="node ${isCenter?'center':''}" data-key="${key}" data-num="${num}" tabindex="0" role="button" aria-label="${label} — Arcana nomor ${num}" >
+        <circle class="dot" cx="${x}" cy="${y}" r="${isCenter?24:22}" />
+        <text class="num" x="${x}" y="${y+1}" aria-hidden="true">${num}</text>
+        <text class="lbl" x="${x}" y="${y + (isCenter?42:38)}" aria-hidden="true">${label}</text>
+      </g>`;
+  }
+  svg += `</svg>`;
+  return svg;
+}
+
+/* =========================================================
+   MODAL: open/close with focus management & simple focus-trap
+========================================================= */
+const overlay = document.getElementById("modalOverlay");
+const modalCard = document.getElementById("modalCard");
+let lastFocusedElement = null;
+
+function openModal(key, num){
+  const arc = ARCANA[num] || {name:"—", meaning:"Belum ada keterangan."};
+  document.getElementById("modalLabel").textContent = NODE_META[key] ? NODE_META[key].label : "Titik";
+  document.getElementById("modalNum").textContent = String(num).padStart(2,"0");
+  document.getElementById("modalArcana").textContent = arc.name;
+  document.getElementById("modalMeaning").textContent = arc.meaning;
+
+  lastFocusedElement = document.activeElement;
+  overlay.classList.add("show");
+  // make visible after repaint to enable CSS transition
+  requestAnimationFrame(()=>overlay.classList.add("visible"));
+  overlay.setAttribute("aria-hidden","false");
+  // hide main from assistive tech for context isolation
+  document.querySelectorAll("main, nav, footer").forEach(el=>el.setAttribute("aria-hidden","true"));
+
+  // focus first focusable in modal
+  const closeBtn = document.getElementById("modalClose");
+  closeBtn.focus();
+
+  // add key handlers for trap
+  document.addEventListener("keydown", trapFocus);
+}
+
+function closeModal(){
+  overlay.classList.remove("visible");
+  overlay.setAttribute("aria-hidden","true");
+  setTimeout(()=>overlay.classList.remove("show"), 250);
+  document.querySelectorAll("main, nav, footer").forEach(el=>el.removeAttribute("aria-hidden"));
+  document.removeEventListener("keydown", trapFocus);
+  if(lastFocusedElement && typeof lastFocusedElement.focus === "function"){
+    lastFocusedElement.focus();
+  }
+}
+
+function trapFocus(e){
+  const focusable = modalCard.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  const first = focusable[0], last = focusable[focusable.length -1];
+  if(e.key === "Escape"){ e.preventDefault(); closeModal(); return; }
+  if(e.key === "Tab"){
+    if(focusable.length === 0) { e.preventDefault(); return; }
+    if(e.shiftKey){
+      if(document.activeElement === first){ e.preventDefault(); last.focus(); }
+    } else {
+      if(document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  }
+}
+
+document.getElementById("modalClose").addEventListener("click", closeModal);
+overlay.addEventListener("click", e=>{ if(e.target===overlay) closeModal(); });
+
+/* =========================================================
+   FORM HANDLING: parse date (with fallback), compute, render, animate
+   - persisting nama & tema ke localStorage
+========================================================= */
+const form = document.getElementById("dashboard-form");
+const dobInput = document.getElementById("dobInput");
+const nameInput = document.getElementById("nameInput");
+const matrixGreeting = document.getElementById("matrixGreeting");
+const matrixHolder = document.getElementById("matrixSvgHolder");
+const basepointsEl = document.getElementById("basepoints");
+const matrixSection = document.getElementById("matrix");
+
+function parseDateInput(val){
+  // Accepts YYYY-MM-DD or date input value; returns [year,month,day] or null
+  if(!val) return null;
+  const parts = val.split("-");
+  if(parts.length === 3){
+    const [y,m,d] = parts.map(Number);
+    if(!Number.isNaN(y) && m>=1 && m<=12 && d>=1 && d<=31){
+      return [y,m,d];
+    }
+  }
+  // try Date parsing as fallback
+  const dt = new Date(val);
+  if(!Number.isNaN(dt.getTime())){
+    return [dt.getFullYear(), dt.getMonth()+1, dt.getDate()];
+  }
+  return null;
+}
+
+// save/load name + theme
+function saveName(n){ try{ localStorage.setItem("matrix_name", n || ""); }catch(e){} }
+function loadName(){ try{ return localStorage.getItem("matrix_name") || ""; }catch(e){ return ""; } }
+
+nameInput.value = loadName();
+nameInput.addEventListener("input", e=> saveName(e.target.value.trim()));
+
+form.addEventListener("submit", function(e){
+  e.preventDefault();
+  const dobRaw = dobInput.value;
+  const parsed = parseDateInput(dobRaw);
+  if(!parsed){ dobInput.setCustomValidity("Mohon masukkan tanggal dalam format YYYY-MM-DD."); dobInput.reportValidity(); return; }
+  dobInput.setCustomValidity("");
+
+  const [year, month, day] = parsed;
+  const name = nameInput.value.trim();
+
+  const values = hitungMatrix(day, month, year);
+
+  // render base points
+  basepointsEl.innerHTML = `
+    <div class="basepoint" aria-hidden="false">Hari <b>${values.A}</b></div>
+    <div class="basepoint" aria-hidden="false">Bulan <b>${values.B}</b></div>
+    <div class="basepoint" aria-hidden="false">Tahun <b>${values.C}</b></div>
+  `;
+
+  // svg
+  matrixHolder.innerHTML = buildSvg(values);
+
+  // greeting
+  matrixGreeting.textContent = name ? `Hasil Perhitungan untuk ${name}` : "Hasil Perhitungan";
+
+  // bind node actions
+  matrixHolder.querySelectorAll(".node").forEach(node=>{
+    const key = node.getAttribute("data-key");
+    const num = Number(node.getAttribute("data-num"));
+    node.addEventListener("click", ()=>openModal(key, num));
+    node.addEventListener("keydown", ev=>{ if(ev.key==="Enter" || ev.key===" "){ ev.preventDefault(); openModal(key,num);} });
+  });
+
+  // entrance animations (graceful fallback if WAAPI not supported)
+  const svgEl = document.getElementById("matrixSvg");
+  if(svgEl){
+    const paths = svgEl.querySelectorAll("path");
+    paths.forEach((p,i)=>{
+      try{
+        const len = p.getTotalLength ? p.getTotalLength() : 400;
+        p.style.strokeDasharray = len;
+        p.style.strokeDashoffset = len;
+        if(p.animate){
+          p.animate([{strokeDashoffset:len},{strokeDashoffset:0}], {duration:900, delay:i*90, easing:"ease-out", fill:"forwards"});
+        } else {
+          // fallback: simple transition
+          setTimeout(()=>{ p.style.transition = 'stroke-dashoffset .9s ease-out'; p.style.strokeDashoffset = 0; }, i*90);
+        }
+      } catch(e){}
+    });
+
+    const nodes = svgEl.querySelectorAll(".node");
+    nodes.forEach((n,i)=>{
+      n.style.opacity = 0;
+      if(n.animate){
+        n.animate([{opacity:0, transform:"scale(.4)"},{opacity:1, transform:"scale(1)"}], {duration:500, delay:600 + i*70, easing:"cubic-bezier(.2,.9,.3,1.4)", fill:"forwards"});
+      } else {
+        setTimeout(()=>{ n.style.transition = 'opacity .45s ease, transform .45s ease'; n.style.opacity = 1; n.style.transform = 'scale(1)'; }, 600 + i*70);
+      }
+    });
+  }
+
+  // make matrix visible & focus
+  matrixSection.classList.add("show");
+  setTimeout(()=> matrixSection.scrollIntoView({behavior:"smooth", block:"start"}), 50);
+
+  // persist name already handled by input listener
+});
+
+/* =========================================================
+   THEME: remember preference, respect system pref on first load
+========================================================= */
+const root = document.documentElement;
+const toggleBtn = document.getElementById("darkToggle");
+function applyTheme(theme){
+  root.setAttribute("data-theme", theme);
+  toggleBtn.textContent = theme === "light" ? "◑" : "◐";
+  toggleBtn.setAttribute("aria-pressed", theme === "light" ? "true" : "false");
+  try{ localStorage.setItem("matrix_theme", theme); }catch(e){}
+}
+
+function loadTheme(){
+  try{
+    const saved = localStorage.getItem("matrix_theme");
+    if(saved) return saved;
+  }catch(e){}
+  // respect system preference
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? "light" : "dark";
+}
+
+applyTheme(loadTheme());
+toggleBtn.addEventListener("click", ()=>{
+  const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+  applyTheme(next);
+});
+
+/* =========================================================
+   Extra: keyboard shortcut to close modal with Esc (global)
+   (trapFocus already handles Esc when modal open)
+========================================================= */
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape"){
+    if(overlay.classList.contains("show")) closeModal();
+  }
+});
+
+/* =========================================================
+   Accessibility & small polish: set role/labels already in HTML
+========================================================= */
+</script>
+</body>
+</html>
